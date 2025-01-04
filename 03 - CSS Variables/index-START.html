@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
@@ -22,7 +24,6 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
-
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -46,7 +47,36 @@
   </style>
 
   <script>
+    const img = document.querySelector("img");
+    const color = document.querySelector("#base");
+    const spacing = document.querySelector("#spacing");
+    const blur = document.querySelector("#blur");
+    let timer;
+    function debounce(cb) {
+      clearTimeout(timer);
+      timer = setTimeout(cb, 10);
+    }
+
+    img.style.background = color.value;
+    function updateSize(event) {
+      debounce(
+        () => {
+          img.style.padding = `${event.target.value}px`;
+        }
+      )
+    }
+    function updateBlur(event) {
+      debounce(() => {
+          img.style.filter = `blur(${event.target.value}px)`;
+      })
+    }
+    blur.addEventListener("mousemove", updateBlur)
+    spacing.addEventListener("mousemove", updateSize)
+    color.addEventListener("change", (event) => {
+      img.style.background = event.target.value;
+    });
   </script>
 
 </body>
+
 </html>
