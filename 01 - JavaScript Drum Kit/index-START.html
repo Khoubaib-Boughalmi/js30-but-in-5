@@ -63,8 +63,7 @@
   <script>
     const keys = document.querySelectorAll(`div .key`);
     const handleKeyPress = (event) => {
-      const keyVal = event.key;
-      const [keyElement] = Array.from(keys).filter(key => key.children[0].innerHTML === keyVal.toUpperCase());
+      const [keyElement] = Array.from(keys).filter(key => key.children[0].innerHTML === event.key.toUpperCase());
       if (keyElement) {
         keyElement.className = `${keyElement.className} playing`
         const audio = document.querySelector(`audio[data-key="${keyElement.getAttribute("data-key")}"]`);
