@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Type Ahead 👀</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
   <form class="search-form">
@@ -15,9 +17,60 @@
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script>
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-</script>
+    const searchField = document.querySelector(".search");
+    const DOMLocations = document.querySelector(".suggestions");
+
+    async function fetchLocations() {
+      try {
+        const resopnse = await fetch(endpoint);
+        const locations = await resopnse.json();
+        return locations;
+      } catch (error) {
+        console.log(error);
+        return [];
+      }
+    }
+
+    let timer;
+    function debounce(cb, timeOut = 400) {
+      clearTimeout(timer);
+      timer = setTimeout(() => cb(), timeOut);
+    }
+
+    function resetList() {
+      DOMLocations.innerHTML = ""
+    }
+
+    function handleInputChange(input, locations) {
+      resetList();
+      const filteredLocations = locations.filter(location =>
+        location.city.toLowerCase().includes(input) || location.state.toLowerCase().includes(input));
+      const searchedLocations = filteredLocations.map(location => {
+        const liDOMElement = document.createElement("li");
+        const result = `${location.city}, ${location.state}`;
+        const startIndex = result.toLocaleLowerCase().indexOf(input.toLocaleLowerCase());
+        const chunkA = result.slice(0, startIndex);
+        const chunkB = result.slice(startIndex, startIndex + input.length);
+        const chunkC = result.slice(startIndex + input.length);
+        liDOMElement.innerHTML = `<span>${chunkA}<span class="hl">${chunkB}</span>${chunkC}</span>`
+        DOMLocations.appendChild(liDOMElement);
+      })
+    }
+
+    async function handleSearch() {
+      const locations = await fetchLocations();
+      console.log(locations);
+      searchField.addEventListener("input", (event) => {
+        debounce(() => handleInputChange(event.target.value, locations));
+      });
+    }
+
+    handleSearch();
+
+  </script>
 </body>
+
 </html>
