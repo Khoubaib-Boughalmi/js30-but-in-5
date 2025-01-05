@@ -19,25 +19,40 @@
     }
 
     // Regular
-
+    console.log("regular");
     // Interpolated
-
+    console.log("Interpolated %s", "LOG");
+    
     // Styled
-
+    console.log("%cstyled log", 'background: red');
+    
     // warning!
-
+    console.warn("warning log");
+    
     // Error :|
-
+    console.error("error log");
+    
     // Info
-
+    console.info("info log");
+    
     // Testing
-
+    console.info("info log");
+    
     // clearing
-
+    console.clear();
+    
     // Viewing DOM Elements
-
+    
     // Grouping together
+    dogs.forEach(dog => {
+      console.groupCollapsed(dog.name)
+      console.log("name: ", dog.name);
+      console.log("age: ", dog.age);
+      console.groupEnd(dog.name)
 
+    })
+
+    console.table(dogs);
     // counting
 
     // timing
